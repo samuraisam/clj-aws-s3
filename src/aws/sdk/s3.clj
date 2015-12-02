@@ -45,6 +45,8 @@
            com.amazonaws.services.s3.model.AbortMultipartUploadRequest
            com.amazonaws.services.s3.model.CompleteMultipartUploadRequest
            com.amazonaws.services.s3.model.UploadPartRequest
+           com.amazonaws.services.s3.model.BucketLoggingConfiguration
+           com.amazonaws.services.s3.model.SetBucketLoggingConfigurationRequest
            java.util.concurrent.Executors
            java.io.ByteArrayInputStream
            java.io.File
@@ -656,3 +658,15 @@
   See update-bucket-acl."
   [grantee permission]
   #(disj % {:grantee grantee :permission permission}))
+
+
+(defn enable-bucket-logging
+  "Update bucket server logging configuration
+  passing nil to disable it"
+  [cred
+   ^String target-bucket
+   ^String prefix]
+  (.setBucketLoggingConfiguration (s3-client cred)
+                                  (SetBucketLoggingConfigurationRequest. target-bucket
+                                                                         (BucketLoggingConfiguration. target-bucket
+                                                                                                      prefix))))
